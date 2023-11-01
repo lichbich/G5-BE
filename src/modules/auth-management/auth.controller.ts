@@ -33,6 +33,8 @@ export class AuthController {
     @Public()
     @Post('sign-up')
     async signUp(@Body() signUpDto: SignUpDto) {
+        console.log('in');
+        
         // const userDto = await this.authService.signUp(signUpDto);
         // return ResponseEntityBuilder
         //     .getBuilder()
