@@ -1,10 +1,10 @@
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { User } from 'src/entitys/users.entity';
-import { IPEntity } from 'src/entitys/ips.entity';
-import { AdInfoEntity } from 'src/entitys/adInfo.entity';
 import { ConfigModule, ConfigService } from '@nestjs/config';
-import { ReportsEntity } from '../../entitys/reports.entity';
-import { FbAccountEntity } from 'src/entitys/fbAccount.entity';
+import { Product } from 'src/entitys/products.entity';
+import { Category } from 'src/entitys/categories.entity';
+import { Order } from 'src/entitys/order';
+import { ProdcutOrder } from 'src/entitys/product_order';
 
 export const MySqlProviders = [
   TypeOrmModule.forRootAsync({
@@ -14,10 +14,10 @@ export const MySqlProviders = [
       // logging: true,
       entities: [
         User,
-        IPEntity,
-        AdInfoEntity,
-        ReportsEntity,
-        FbAccountEntity
+        Order,
+        Product,
+        Category,
+        ProdcutOrder
       ],
       // dropSchema: true,
       synchronize: true,

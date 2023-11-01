@@ -4,38 +4,36 @@ import { ConfigService } from '@nestjs/config';
 import { User } from 'src/entitys/users.entity';
 import { LoginDto } from 'src/models/request/LoginDto';
 import { SignUpDto } from 'src/models/request/SignUpDto';
-import { UserService } from 'src/modules/users-management/users.service';
 
 @Injectable()
 export class AuthService {
     constructor(
         private jwtService: JwtService,
-        private userService: UserService,
         private configService: ConfigService
     ) { }
 
     validateUser(loginDto: LoginDto) {
-        return this.userService.login(loginDto);
+        // return this.userService.login(loginDto);
     }
 
     signUp(signUpDto: SignUpDto) {
-        return this.userService.signUp(signUpDto);
+        // return this.userService.signUp(signUpDto);
     }
 
     sendVerifyEmail(email: string) {
-        return this.userService.sendVerifyEmail(email);
+        // return this.userService.sendVerifyEmail(email);
     }
 
     verifyEmail(userId: string, verifyCode: String) {
-        return this.userService.verifyCode(userId, verifyCode);
+        // return this.userService.verifyCode(userId, verifyCode);
     }
 
     sendFogotPasswordCode(email: string) {
-        return this.userService.sendFogotPasswordCode(email);
+        // return this.userService.sendFogotPasswordCode(email);
     }
 
     verifyFogotPasswordCode(email: string, code: string) {
-        return this.userService.verifyFogotPasswordCode(email, code);
+        // return this.userService.verifyFogotPasswordCode(email, code);
     }
 
     public getCookieWithJwtAccessToken(user: User) {

@@ -4,8 +4,8 @@ import { ProdcutOrder } from "./product_order";
 
 export enum OrderStatus {
     PENDING = 0,
-    SHIPPING = 0,
-    COMPELETE = 0,
+    SHIPPING = 1,
+    COMPELETE = 2,
 }
 
 @Entity('orders')

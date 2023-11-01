@@ -3,19 +3,13 @@ import { AuthService } from './auth.service';
 import { ResultResponse } from 'src/models/common';
 import { LoginDto } from 'src/models/request/LoginDto';
 import { SignUpDto } from 'src/models/request/SignUpDto';
-import { FogotPasswordDto } from './dtos/FogotPasswordDto';
 import { Public } from 'src/modules/_guards/jwt-auth.guard';
-import { VerifyEmailDto } from 'src/models/request/verifyEmailDto';
-import { VerifyFogotPasswordDto } from './dtos/VerifyFogotPasswordDto';
-import { UserService } from 'src/modules/users-management/users.service';
-import { SendVerifyEmailDto } from 'src/models/request/sendVerifyEmailDto';
 import ResponseEntityBuilder from 'src/models/response/common/ResponseEntityBuilder';
 import { Body, Controller, Get, HttpCode, HttpStatus, Post, Req, Res } from '@nestjs/common';
 
 @Controller()
 export class AuthController {
     constructor(
-        private userService: UserService,
         private readonly authService: AuthService
     ) { }
 
@@ -39,52 +33,12 @@ export class AuthController {
     @Public()
     @Post('sign-up')
     async signUp(@Body() signUpDto: SignUpDto) {
-        const userDto = await this.authService.signUp(signUpDto);
-        return ResponseEntityBuilder
-            .getBuilder()
-            .setCode(HttpStatus.OK)
-            .setData(userDto)
-            .build()
-    }
-
-    @Public()
-    @Post('send-verify-email')
-    async sendVerifyEmail(@Body() { email }: SendVerifyEmailDto) {
-        await this.authService.sendVerifyEmail(email);
-        return ResponseEntityBuilder
-            .getBuilder()
-            .setCode(HttpStatus.OK)
-            .build()
-    }
-
-    @Public()
-    @Post('verify-email')
-    async verifyEmail(@Body() { userId, verifyCode }: VerifyEmailDto) {
-        await this.authService.verifyEmail(userId, verifyCode);
-        return ResponseEntityBuilder
-            .getBuilder()
-            .setCode(HttpStatus.OK)
-            .build()
-    }
-
-    @Public()
-    @Post('send-fogot-password-code')
-    async sendFogotPasswordCode(@Body() { email }: FogotPasswordDto) {
-        await this.authService.sendFogotPasswordCode(email);
-        return ResponseEntityBuilder
-            .getBuilder()
-            .setCode(HttpStatus.OK)
-            .build()
-    }
-
-    @Public()
-    @Post('verify-fogot-password-code')
-    async verifyFogotPasswordCode(@Body() { email, code }: VerifyFogotPasswordDto) {
-        await this.authService.verifyFogotPasswordCode(email, code);
-        return ResponseEntityBuilder
-            .getBuilder()
-            .setCode(HttpStatus.OK)
-            .build()
+        // const userDto = await this.authService.signUp(signUpDto);
+        // return ResponseEntityBuilder
+        //     .getBuilder()
+        //     .setCode(HttpStatus.OK)
+        //     .setData(userDto)
+        //     .build()
     }
 
     @Get('logout')
@@ -99,13 +53,14 @@ export class AuthController {
             .build()
     }
 
-    @Get('refresh')
-    refresh(@Req() request) {
+    @Get("fogot-password")
+    forgotPassword(@Req() request, @Res({ passthrough: true }) response: Response): ResultResponse {
         const { user } = request;
-        // const accessTokenCookie = this.authenticationService.getCookieWithJwtAccessToken(user);
-
-        // request.res.setHeader('Set-Cookie', accessTokenCookie);
-        return request.user;
+        return ResponseEntityBuilder
+            .getBuilder()
+            .setCode(HttpStatus.OK)
+            .setData(user)
+            .build()
     }
 
     @Get("check-authentication")
