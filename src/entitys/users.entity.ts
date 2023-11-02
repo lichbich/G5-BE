@@ -21,10 +21,10 @@ export class User extends BaseEntity {
   @Column()
   u_password: string;
 
-  @Column()
+  @Column({ nullable: true })
   u_address: string;
 
-  @Column({ default: "" })
+  @Column({ nullable: true })
   u_phone: string;
 
   @Column({
