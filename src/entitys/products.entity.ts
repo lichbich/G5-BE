@@ -1,28 +1,34 @@
-import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
-import { BaseEntity } from "./base/BaseEntity";
-import { ProdcutOrder } from "./product_order";
-import { Category } from "./categories.entity";
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { BaseEntity } from './base/BaseEntity';
+import { ProdcutOrder } from './product_order';
+import { Category } from './categories.entity';
 
 @Entity('products')
 export class Product extends BaseEntity {
-    @Column()
-    p_name: string;
+  @Column()
+  pName: string;
 
-    @Column()
-    p_description: string;
+  @Column()
+  pDescription: string;
 
-    @Column()
-    p_price: string;
+  @Column()
+  pPrice: number;
 
-    @Column()
-    p_img_link: string;
+  @Column()
+  pQuantity: number;
 
-    @Column()
-    is_active: string;
+  @Column()
+  pImgLink: string;
 
-    @OneToMany(() => ProdcutOrder, prodcutOrder => prodcutOrder.product)
-    product_orders: ProdcutOrder[];
+  @Column({ name: 'is_active', default: true })
+  isActive: boolean;
 
-    @ManyToOne(() => Category, c => c.products)
-    category: Category;
+  @Column({ name: 'del_yn', default: false })
+  delYn: boolean;
+
+  @OneToMany(() => ProdcutOrder, (prodcutOrder) => prodcutOrder.product)
+  productOrders: ProdcutOrder[];
+
+  @ManyToOne(() => Category, (c) => c.products)
+  category: Category;
 }

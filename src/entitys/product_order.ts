@@ -14,7 +14,7 @@ export class ProdcutOrder extends BaseEntity {
     @Column()
     total: number;
 
-    @ManyToOne(() => Product, (p) => p.product_orders)
+    @ManyToOne(() => Product, (p) => p.productOrders)
     product: Product;
 
     @ManyToOne(() => Order, (o) => o.product_orders)

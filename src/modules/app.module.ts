@@ -9,6 +9,8 @@ import { AbilityModule } from './ability/ability.module';
 import { AuthModule } from './auth-management/auth.module';
 import { ValidationFilter } from 'src/config/exceptionHandler/ValidationFilter';
 import { GlobalHttpExceptionFilter } from 'src/config/exceptionHandler/GlobalHttpExceptionFilter';
+import { CategoryModule } from './categories-management/category.module';
+import { ProductModule } from './products-management/product.module';
 
 @Module({
   providers: [
@@ -24,12 +26,14 @@ import { GlobalHttpExceptionFilter } from 'src/config/exceptionHandler/GlobalHtt
     // For author - For Authen
     AuthModule,
     AbilityModule,
+    CategoryModule,
+    ProductModule,
     // Modules
 
     ConfigModule.forRoot({
       envFilePath: `.env.${process.env.NODE_ENV}`,
-      isGlobal: true
+      isGlobal: true,
     }),
   ],
 })
-export class AppModule { }
+export class AppModule {}

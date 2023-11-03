@@ -1,18 +1,21 @@
-import { Column, Entity, OneToMany } from "typeorm";
-import { BaseEntity } from "./base/BaseEntity";
-import { Product } from "./products.entity";
+import { Column, Entity, OneToMany } from 'typeorm';
+import { BaseEntity } from './base/BaseEntity';
+import { Product } from './products.entity';
 
 @Entity('categories')
 export class Category extends BaseEntity {
   @Column()
-  cat_name: string;
+  catName: string;
 
   @Column()
-  cat_description: string;
+  catDescription: string;
 
-  @Column()
-  is_active: string;
+  @Column({ name: 'is_active', default: true })
+  isActive: boolean;
 
-  @OneToMany(() => Product, p => p.category)
+  @Column({ name: 'del_yn', default: false })
+  delYn: boolean;
+
+  @OneToMany(() => Product, (p) => p.category)
   products: Product[];
 }
