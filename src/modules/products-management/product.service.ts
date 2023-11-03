@@ -17,7 +17,7 @@ export class ProductService {
 
   async getProducts(searchName = '', skip = 0, take = 10) {
     const [result, total] = await this.productRepo.findAndCount({
-      where: { pName: ILike(`%${searchName}%`) },
+      where: { pName: ILike(`%${searchName}%`), delYn: false },
       take: take,
       skip: skip,
     });
@@ -70,6 +70,20 @@ export class ProductService {
         { id: id },
         {
           delYn: true,
+        },
+      )
+      .then(() => handleSuccessRequest({}))
+      .catch(() => {
+        throw new HttpException('ERROR', HttpStatus.BAD_REQUEST);
+      });
+  }
+
+  updateProductImage(id, filePath: string) {
+    return this.productRepo
+      .update(
+        { id: id },
+        {
+          pImgLink: filePath,
         },
       )
       .then(() => handleSuccessRequest({}))

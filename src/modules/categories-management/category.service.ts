@@ -1,5 +1,5 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DataSource, Repository } from 'typeorm';
+import { DataSource, ILike, Repository } from 'typeorm';
 import { Category } from '../../entitys/categories.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { handleSuccessRequest } from '../../models/common';
@@ -12,8 +12,13 @@ export class CategoryService {
     private readonly dataSource: DataSource,
     @InjectRepository(Category) private catRepo: Repository<Category>,
   ) {}
-  async getAllCategories() {
-    return await this.catRepo.find({ where: { delYn: false } });
+  async getCategories(searchName = '', skip = 0, take = 10) {
+    const [result, total] = await this.catRepo.findAndCount({
+      where: { catName: ILike(`%${searchName}%`), delYn: false },
+      take: take,
+      skip: skip,
+    });
+    return { data: result, total: total };
   }
 
   async createCategory(categoryDto: CreateCategoryDto) {

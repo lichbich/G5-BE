@@ -16,7 +16,7 @@ import { CreateProductDto } from '../auth-management/dtos/createProduct.dto';
 import { diskStorage } from 'multer';
 import path = require('path');
 import { v4 as uuidv4 } from 'uuid';
-import {UpdateProductDto} from "../auth-management/dtos/updateProduct.dto";
+import { UpdateProductDto } from '../auth-management/dtos/updateProduct.dto';
 
 export const storage = {
   storage: diskStorage({
@@ -40,7 +40,7 @@ export class ProductController {
   async getProducts(@Query() query) {
     return this.productService.getProducts(
       query.searchName || '',
-      Number(query.page || 0),
+      Number(query.page || 0) * Number(query.size || 0),
       Number(query.size || 10),
     );
   }
@@ -65,5 +65,13 @@ export class ProductController {
   @Delete('/delete/:id')
   async deleteCategory(@Param('id') id) {
     return this.productService.deleteCategory(id);
+  }
+
+  @Public()
+  @UseInterceptors(FileInterceptor('file', storage))
+  @Post('/update/:id')
+  async updateProductImage(@Param('id') id, @UploadedFile() file) {
+    const filePath = file.destination.replace('.') + '/' + file.filename;
+    return this.productService.updateProductImage(id, filePath);
   }
 }

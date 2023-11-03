@@ -1,5 +1,12 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
-import ResponseEntityBuilder from '../../models/response/common/ResponseEntityBuilder';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Query,
+} from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto } from '../auth-management/dtos/createCategory.dto';
 import { Public } from '../_guards/jwt-auth.guard';
@@ -11,10 +18,12 @@ export class CategoryController {
 
   @Public()
   @Get()
-  async getAllCategories() {
-    return ResponseEntityBuilder.getBuilder()
-      .setData(await this.categoryService.getAllCategories())
-      .build();
+  async getCategories(@Query() query) {
+    return this.categoryService.getCategories(
+      query.searchName || '',
+      Number(query.page || 0) * Number(query.size || 0),
+      Number(query.size || 10),
+    );
   }
 
   @Public()
