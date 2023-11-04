@@ -1,29 +1,34 @@
-import { Column, Entity, OneToMany } from "typeorm";
-import { BaseEntity } from "./base/BaseEntity";
-import { ProdcutOrder } from "./product_order";
+import { Column, Entity, ManyToOne, OneToMany } from 'typeorm';
+import { BaseEntity } from './base/BaseEntity';
+import { ProdcutOrder } from './product_order';
+import { User } from './users.entity';
 
 export enum OrderStatus {
-    PENDING = 0,
-    SHIPPING = 1,
-    COMPELETE = 2,
+  PENDING = 0,
+  SHIPPING = 1,
+  COMPELETE = 2,
+  CANCEL,
 }
 
 @Entity('orders')
 export class Order extends BaseEntity {
-    @Column()
-    o_address: string;
+  @Column()
+  o_address: string;
 
-    @Column()
-    o_phone: string;
+  @Column()
+  o_phone: string;
 
-    @Column({
-        type: 'enum',
-        enum: OrderStatus,
-        default: OrderStatus.PENDING,
-        nullable: false
-    })
-    o_status: OrderStatus;
+  @Column({
+    type: 'enum',
+    enum: OrderStatus,
+    default: OrderStatus.PENDING,
+    nullable: false,
+  })
+  o_status: OrderStatus;
 
-    @OneToMany(() => ProdcutOrder, prodcutOrder => prodcutOrder.order)
-    product_orders: ProdcutOrder[];
+  @OneToMany(() => ProdcutOrder, (prodcutOrder) => prodcutOrder.order)
+  product_orders: ProdcutOrder[];
+
+  @ManyToOne(() => User, (user) => user.id)
+  user: User;
 }
