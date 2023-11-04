@@ -67,7 +67,7 @@ export class ProductController {
   @Post()
   async createProduct(@UploadedFile() file, @Body() createProductDto: CreateProductDto) {
     if (file) {
-      const filePath = file.destination.replace('.') + '/' + file.filename;
+      const filePath = file.path;
       return this.productService.createProduct(createProductDto, filePath);
     } else {
       return this.productService.createProduct(createProductDto, '');
@@ -77,7 +77,7 @@ export class ProductController {
   @Public()
   @Post('/update')
   async updateProduct(@Body() updateProductDto: UpdateProductDto) {
-    return this.productService.updateProduct(updateProductDto);
+    return this.productService.updateProduct(updateProductDto, '');
   }
   @Public()
   @Delete('/delete/:id')
@@ -86,10 +86,14 @@ export class ProductController {
   }
 
   @Public()
-  @UseInterceptors(FileInterceptor('file', storage))
+  @UseInterceptors(FileInterceptor('file', { storage: getStorage('image') }))
   @Post('/update/:id')
-  async updateProductImage(@Param('id') id, @UploadedFile() file) {
-    const filePath = file.destination.replace('.') + '/' + file.filename;
-    return this.productService.updateProductImage(id, filePath);
+  async updateProductImage(@Param('id') id, @UploadedFile() file, @Body() updateProductDto: UpdateProductDto) {
+    if (file) {
+      const filePath = file.path;
+      return this.productService.updateProduct(updateProductDto, filePath);
+    } else {
+      return this.productService.updateProduct(updateProductDto, '');
+    }
   }
 }

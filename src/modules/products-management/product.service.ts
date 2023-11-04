@@ -38,9 +38,7 @@ export class ProductService {
     product.pQuantity = createProductDto.pQuantity;
     product.pImgLink = filePath;
     product.isActive = createProductDto.isActive;
-    product.category = await this.catRepo.findOneBy({
-      id: createProductDto.categoryId,
-    });
+    product.category = await this.catRepo.findOneBy({ id: createProductDto.categoryId });
     return this.productRepo
       .save(product)
       .then(() => handleSuccessRequest({}))
@@ -49,18 +47,20 @@ export class ProductService {
       });
   }
 
-  async updateProduct(updateProductDto: UpdateProductDto) {
+  async updateProduct(updateProductDto: UpdateProductDto, filePath: string) {
     const category = await this.catRepo.findOneBy({ id: updateProductDto.categoryId });
+    const updateContent: any = {
+      pName: updateProductDto.pName,
+      pDescription: updateProductDto.pDescription,
+      pPrice: updateProductDto.pPrice,
+      category: category,
+      isActive: updateProductDto.isActive,
+    }
+    if (filePath) updateContent.pImgLink = filePath
     return this.productRepo
       .update(
         { id: updateProductDto.id },
-        {
-          pName: updateProductDto.pName,
-          pDescription: updateProductDto.pDescription,
-          pPrice: updateProductDto.pPrice,
-          category: category,
-          isActive: updateProductDto.isActive,
-        },
+        { ...updateContent },
       )
       .then(() => handleSuccessRequest({}))
       .catch(() => {

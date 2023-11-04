@@ -40,7 +40,11 @@ import { GlobalHttpExceptionFilter } from './config/exceptionHandler/GlobalHttpE
   app.use(cookieParser());
   app.use(json({ limit: '1000mb' }));
   app.use(urlencoded({ limit: '1000mb', extended: true }));
-  app.useStaticAssets(join(__dirname, '..', 'public'));
+  app.useStaticAssets(join(__dirname, '..', 'public/uploads/image'));
+  app.useStaticAssets(join(__dirname, '..', 'public/uploads/image'), {
+    index: false,
+    prefix: '/public/uploads/image',
+  });
   app.useStaticAssets(join(__dirname, '..', 'uploads'));
   app.useStaticAssets(join(__dirname, '..', 'uploads'), {
     index: false,
