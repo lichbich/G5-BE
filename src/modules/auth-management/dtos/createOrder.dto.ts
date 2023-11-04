@@ -13,21 +13,12 @@ export class CreateOrderDto {
   @IsNotEmpty()
   phone: string;
 
-  @IsString()
   @IsNotEmpty()
   product: Array<{
     id: string;
     price: number;
     quantity: number;
   }>;
-
-  // @IsString()
-  // @IsNotEmpty()
-  // quantity: number;
-  //
-  // @IsString()
-  // @IsNotEmpty()
-  // price: number;
 
   constructor() {}
 }
