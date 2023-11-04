@@ -45,6 +45,13 @@ export class ProductController {
       Number(query.size || 10),
     );
   }
+
+  @Public()
+  @Get()
+  async getProductsDetail(@Param() id: String) {
+    return this.productService.getProductDetail(id);
+  }
+
   @Public()
   @Get('/getByCategory')
   async getProductsByCategory(@Query() query) {
@@ -56,7 +63,7 @@ export class ProductController {
   }
 
   @Public()
-  @UseInterceptors(FileInterceptor('file', getStorage('image')))
+  @UseInterceptors(FileInterceptor('file', { storage: getStorage('image') }))
   @Post()
   async createProduct(@UploadedFile() file, @Body() createProductDto: CreateProductDto) {
     if (file) {

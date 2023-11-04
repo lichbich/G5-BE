@@ -25,6 +25,11 @@ export class ProductService {
     return { data: result, total: total };
   }
 
+  async getProductDetail(id) {
+    const product = this.productRepo.find({ where: { id } })
+    return product;
+  }
+
   async createProduct(createProductDto: CreateProductDto, filePath: string) {
     const product = new Product();
     product.pName = createProductDto.pName;
