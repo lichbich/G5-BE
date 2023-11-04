@@ -11,6 +11,7 @@ import { ValidationFilter } from 'src/config/exceptionHandler/ValidationFilter';
 import { GlobalHttpExceptionFilter } from 'src/config/exceptionHandler/GlobalHttpExceptionFilter';
 import { CategoryModule } from './categories-management/category.module';
 import { ProductModule } from './products-management/product.module';
+import { OrderModule } from './order-management/order.module';
 
 @Module({
   providers: [
@@ -28,6 +29,7 @@ import { ProductModule } from './products-management/product.module';
     AbilityModule,
     CategoryModule,
     ProductModule,
+    OrderModule,
     // Modules
 
     ConfigModule.forRoot({

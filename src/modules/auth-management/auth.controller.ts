@@ -1,8 +1,8 @@
 import { Response } from 'express';
+import { LoginDto } from './dtos/LoginDto';
 import { AuthService } from './auth.service';
+import { SignUpDto } from './dtos/SignUpDto';
 import { ResultResponse } from 'src/models/common';
-import { LoginDto } from 'src/models/request/LoginDto';
-import { SignUpDto } from 'src/models/request/SignUpDto';
 import { Public } from 'src/modules/_guards/jwt-auth.guard';
 import ResponseEntityBuilder from 'src/models/response/common/ResponseEntityBuilder';
 import {
@@ -27,12 +27,13 @@ export class AuthController {
     @Body() loginDto: LoginDto,
     @Res({ passthrough: true }) response: Response,
   ) {
-    const user: any = await this.authService.validateUser(loginDto);
-    const { accessToken } = this.authService.getCookieWithJwtAccessToken(user);
+    const user: any = await this.authService.login(loginDto);
+    const { accessToken, cookie } =
+      this.authService.getCookieWithJwtAccessToken(user);
     const { refreshToken } =
       this.authService.getCookieWithJwtRefreshToken(user);
     // await this.userService.setCurrentRefreshToken(refreshTokenCookie.token, user.id);
-    // response.setHeader('Set-Cookie', [accessTokenCookie, refreshTokenCookie.cookie]);
+    response.setHeader('Set-Cookie', [cookie]);
     user.accessToken = accessToken;
     return ResponseEntityBuilder.getBuilder()
       .setCode(HttpStatus.OK)
@@ -43,19 +44,17 @@ export class AuthController {
   @Public()
   @Post('sign-up')
   async signUp(@Body() signUpDto: SignUpDto) {
-    // const userDto = await this.authService.signUp(signUpDto);
-    // return ResponseEntityBuilder
-    //     .getBuilder()
-    //     .setCode(HttpStatus.OK)
-    //     .setData(userDto)
-    //     .build()
+    const userDto = await this.authService.signUp(signUpDto);
+    return ResponseEntityBuilder.getBuilder()
+      .setCode(HttpStatus.OK)
+      .setData(userDto)
+      .build();
   }
 
   @Get('logout')
   async logout(@Req() req, @Res({ passthrough: true }) response: Response) {
-    // const cookies = this.authenticationService.getCookieWithLogout();
-    // await this.userService.removeRefreshToken(user.id);
-    // response.setHeader('Set-Cookie', cookies);
+    const cookies = this.authService.getCookieWithLogout();
+    response.setHeader('Set-Cookie', cookies);
 
     return ResponseEntityBuilder.getBuilder().setCode(HttpStatus.OK).build();
   }

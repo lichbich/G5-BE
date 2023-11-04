@@ -27,6 +27,12 @@ export class CategoryController {
   }
 
   @Public()
+  @Get('/customer')
+  async getCategoriesForCustomer() {
+    return this.categoryService.getCategoriesForCustomer();
+  }
+
+  @Public()
   @Post()
   async createCategory(@Body() category: CreateCategoryDto) {
     const categoryDto = new CreateCategoryDto();

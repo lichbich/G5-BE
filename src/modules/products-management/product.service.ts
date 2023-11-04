@@ -91,4 +91,16 @@ export class ProductService {
         throw new HttpException('ERROR', HttpStatus.BAD_REQUEST);
       });
   }
+
+  async getProductsByCategory(categoryId = '', skip = 0, take = 10) {
+    const query = this.productRepo
+      .createQueryBuilder('p')
+      .where('p.category = :categoryId', { categoryId })
+      .andWhere('p.delYn = false')
+      .take(take)
+      .skip(skip);
+    const total = await query.getCount();
+    const { entities } = await query.getRawAndEntities();
+    return { data: entities, total: total };
+  }
 }

@@ -44,6 +44,15 @@ export class ProductController {
       Number(query.size || 10),
     );
   }
+  @Public()
+  @Get('/getByCategory')
+  async getProductsByCategory(@Query() query) {
+    return this.productService.getProductsByCategory(
+      query.categoryId || '',
+      Number(query.page || 0) * Number(query.size || 0),
+      Number(query.size || 10),
+    );
+  }
 
   @Public()
   @UseInterceptors(FileInterceptor('file', storage))

@@ -63,4 +63,8 @@ export class CategoryService {
         throw new HttpException('ERROR', HttpStatus.BAD_REQUEST);
       });
   }
+
+  getCategoriesForCustomer() {
+    return this.catRepo.find({ where: { delYn: false, isActive: true } });
+  }
 }
