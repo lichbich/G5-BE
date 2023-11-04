@@ -13,11 +13,12 @@ export class ProductService {
     private readonly dataSource: DataSource,
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Category) private catRepo: Repository<Category>,
-  ) {}
+  ) { }
 
   async getProducts(searchName = '', skip = 0, take = 10) {
     const [result, total] = await this.productRepo.findAndCount({
       where: { pName: ILike(`%${searchName}%`), delYn: false },
+      relations: ['category'],
       take: take,
       skip: skip,
     });
@@ -44,9 +45,7 @@ export class ProductService {
   }
 
   async updateProduct(updateProductDto: UpdateProductDto) {
-    const category = await this.catRepo.findOneBy({
-      id: updateProductDto.categoryId,
-    });
+    const category = await this.catRepo.findOneBy({ id: updateProductDto.categoryId });
     return this.productRepo
       .update(
         { id: updateProductDto.id },
@@ -66,12 +65,7 @@ export class ProductService {
 
   async deleteCategory(id: string) {
     return this.catRepo
-      .update(
-        { id: id },
-        {
-          delYn: true,
-        },
-      )
+      .update({ id: id }, { delYn: true })
       .then(() => handleSuccessRequest({}))
       .catch(() => {
         throw new HttpException('ERROR', HttpStatus.BAD_REQUEST);
@@ -80,12 +74,7 @@ export class ProductService {
 
   updateProductImage(id, filePath: string) {
     return this.productRepo
-      .update(
-        { id: id },
-        {
-          pImgLink: filePath,
-        },
-      )
+      .update({ id: id }, { pImgLink: filePath })
       .then(() => handleSuccessRequest({}))
       .catch(() => {
         throw new HttpException('ERROR', HttpStatus.BAD_REQUEST);

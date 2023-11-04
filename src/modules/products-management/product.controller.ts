@@ -17,6 +17,7 @@ import { diskStorage } from 'multer';
 import path = require('path');
 import { v4 as uuidv4 } from 'uuid';
 import { UpdateProductDto } from '../auth-management/dtos/updateProduct.dto';
+import { getStorage } from 'src/utils/fileConfig';
 
 export const storage = {
   storage: diskStorage({
@@ -33,7 +34,7 @@ export const storage = {
 
 @Controller()
 export class ProductController {
-  constructor(private readonly productService: ProductService) {}
+  constructor(private readonly productService: ProductService) { }
 
   @Public()
   @Get()
@@ -55,14 +56,15 @@ export class ProductController {
   }
 
   @Public()
-  @UseInterceptors(FileInterceptor('file', storage))
+  @UseInterceptors(FileInterceptor('file', getStorage('image')))
   @Post()
-  async createProduct(
-    @UploadedFile() file,
-    @Body() createProductDto: CreateProductDto,
-  ) {
-    const filePath = file.destination.replace('.') + '/' + file.filename;
-    return this.productService.createProduct(createProductDto, filePath);
+  async createProduct(@UploadedFile() file, @Body() createProductDto: CreateProductDto) {
+    if (file) {
+      const filePath = file.destination.replace('.') + '/' + file.filename;
+      return this.productService.createProduct(createProductDto, filePath);
+    } else {
+      return this.productService.createProduct(createProductDto, '');
+    }
   }
 
   @Public()
