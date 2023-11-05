@@ -88,7 +88,6 @@ export class ProductService {
       pPrice: updateProductDto.pPrice,
       pQuantity: updateProductDto.pQuantity,
       category: category,
-      pQuantity: updateProductDto.pQuantity,
       isActive: updateProductDto.isActive === 'true',
     };
     if (filePath) updateContent.pImgLink = filePath;
