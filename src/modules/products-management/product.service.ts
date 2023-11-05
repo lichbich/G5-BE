@@ -13,7 +13,7 @@ export class ProductService {
     private readonly dataSource: DataSource,
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Category) private catRepo: Repository<Category>,
-  ) { }
+  ) {}
 
   async getProducts(searchName = '', skip = 0, take = 10) {
     const [result, total] = await this.productRepo.findAndCount({
@@ -26,7 +26,7 @@ export class ProductService {
   }
 
   async getProductDetail(id) {
-    const product = this.productRepo.find({ where: { id } })
+    const product = this.productRepo.find({ where: { id } });
     return product;
   }
 
@@ -38,7 +38,9 @@ export class ProductService {
     product.pQuantity = createProductDto.pQuantity;
     product.pImgLink = filePath;
     product.isActive = createProductDto.isActive;
-    product.category = await this.catRepo.findOneBy({ id: createProductDto.categoryId });
+    product.category = await this.catRepo.findOneBy({
+      id: createProductDto.categoryId,
+    });
     return this.productRepo
       .save(product)
       .then(() => handleSuccessRequest({}))
@@ -48,20 +50,19 @@ export class ProductService {
   }
 
   async updateProduct(updateProductDto: UpdateProductDto, filePath: string) {
-    const category = await this.catRepo.findOneBy({ id: updateProductDto.categoryId });
+    const category = await this.catRepo.findOneBy({
+      id: updateProductDto.categoryId,
+    });
     const updateContent: any = {
       pName: updateProductDto.pName,
       pDescription: updateProductDto.pDescription,
       pPrice: updateProductDto.pPrice,
       category: category,
-      isActive: updateProductDto.isActive,
-    }
-    if (filePath) updateContent.pImgLink = filePath
+      isActive: updateProductDto.isActive === 'true',
+    };
+    if (filePath) updateContent.pImgLink = filePath;
     return this.productRepo
-      .update(
-        { id: updateProductDto.id },
-        { ...updateContent },
-      )
+      .update({ id: updateProductDto.id }, { ...updateContent })
       .then(() => handleSuccessRequest({}))
       .catch(() => {
         throw new HttpException('ERROR', HttpStatus.BAD_REQUEST);
@@ -69,7 +70,7 @@ export class ProductService {
   }
 
   async deleteCategory(id: string) {
-    return this.catRepo
+    return this.productRepo
       .update({ id: id }, { delYn: true })
       .then(() => handleSuccessRequest({}))
       .catch(() => {
@@ -86,10 +87,16 @@ export class ProductService {
       });
   }
 
-  async getProductsByCategory(categoryId = '', skip = 0, take = 10) {
+  async getProductsByCategory(
+    categoryId = '',
+    searchName = '',
+    skip = 0,
+    take = 10,
+  ) {
     const query = this.productRepo
       .createQueryBuilder('p')
       .where('p.category = :categoryId', { categoryId })
+      .andWhere('p.pName like :name', { name: `%${searchName}%` })
       .andWhere('p.delYn = false')
       .take(take)
       .skip(skip);

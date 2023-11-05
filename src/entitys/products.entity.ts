@@ -8,7 +8,7 @@ export class Product extends BaseEntity {
   @Column()
   pName: string;
 
-  @Column()
+  @Column({ length: 2000 })
   pDescription: string;
 
   @Column()

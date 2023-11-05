@@ -18,7 +18,7 @@ export class UpdateProductDto {
   categoryId: string;
 
   @IsNotEmpty()
-  isActive: boolean;
+  isActive: string;
 
   constructor() {}
 }

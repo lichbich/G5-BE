@@ -7,7 +7,7 @@ export class Category extends BaseEntity {
   @Column()
   catName: string;
 
-  @Column()
+  @Column({ length: 2000 })
   catDescription: string;
 
   @Column({ name: 'is_active', default: true })

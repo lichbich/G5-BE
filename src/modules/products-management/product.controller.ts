@@ -57,6 +57,7 @@ export class ProductController {
   async getProductsByCategory(@Query() query) {
     return this.productService.getProductsByCategory(
       query.categoryId || '',
+      query.searchName,
       Number(query.page || 0) * Number(query.size || 0),
       Number(query.size || 10),
     );
