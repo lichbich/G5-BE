@@ -7,7 +7,7 @@ export enum OrderStatus {
   PENDING = 0,
   SHIPPING = 1,
   COMPELETE = 2,
-  CANCEL,
+  CANCEL = 3,
 }
 
 @Entity('orders')
