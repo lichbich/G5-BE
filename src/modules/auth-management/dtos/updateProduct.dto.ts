@@ -14,6 +14,9 @@ export class UpdateProductDto {
   @IsString()
   pPrice: number;
 
+  @IsString()
+  pQuantity: number;
+
   @IsNotEmpty()
   categoryId: string;
 

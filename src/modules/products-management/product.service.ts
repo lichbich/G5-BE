@@ -32,7 +32,7 @@ export class ProductService {
       take: take,
       skip: skip,
     });
-    
+
     return { data: result, total: total };
   }
 
@@ -86,6 +86,7 @@ export class ProductService {
       pName: updateProductDto.pName,
       pDescription: updateProductDto.pDescription,
       pPrice: updateProductDto.pPrice,
+      pQuantity: updateProductDto.pQuantity,
       category: category,
       isActive: updateProductDto.isActive === 'true',
     };
