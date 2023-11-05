@@ -39,7 +39,10 @@ export class AuthService {
             const user = new User();
             user.u_name = signUpDto.u_name;
             user.u_email = signUpDto.u_email;
+            user.u_phone = signUpDto.u_phone;
+            user.u_address = signUpDto.u_address;
             user.u_password = signUpDto.u_password;
+            
             const isExistEmail = await queryRunner.manager.exists(User, { where: { u_email: user.u_email } });
             if (isExistEmail) throw new Error('Email already registered!');
             const newUser = await queryRunner.manager.save(user);
