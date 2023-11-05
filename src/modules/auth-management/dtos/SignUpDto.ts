@@ -1,4 +1,4 @@
-import { IsEmail, IsNotEmpty, IsString } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsOptional, IsPhoneNumber, IsString } from 'class-validator';
 
 export class SignUpDto {
     @IsNotEmpty()
@@ -11,6 +11,13 @@ export class SignUpDto {
 
     @IsNotEmpty()
     u_password: string;
+
+    @IsOptional()
+    u_address: string;
+
+    @IsOptional()
+    @IsPhoneNumber('VN')
+    u_phone: string;
 
     constructor() { }
 }
