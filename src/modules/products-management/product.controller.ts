@@ -53,6 +53,38 @@ export class ProductController {
   }
 
   @Public()
+  @Get('/none-best-seller')
+  async getProductsNoneBestSeller(@Query() query) {
+    return this.productService.getProductsNoneBestSeller(
+      query.searchName || '',
+      Number(query.page || 0) * Number(query.size || 0),
+      Number(query.size || 10),
+    );
+  }
+
+  @Public()
+  @Get('/best-seller')
+  async getProductsBestSeller(@Query() query) {
+    return this.productService.getProductsBestSeller(
+      query.searchName || '',
+      Number(query.page || 0) * Number(query.size || 0),
+      Number(query.size || 10),
+    );
+  }
+
+  @Public()
+  @Get('/add-best-seller/:id')
+  async addBestSellerTag(@Param('id') id: string) {
+    return this.productService.addBestSellerTag(id);
+  }
+
+  @Public()
+  @Get('/remove-best-seller/:id')
+  async removeBestSellerTag(@Param('id') id: string) {
+    return this.productService.removeBestSellerTag(id);
+  }
+
+  @Public()
   @Get('/getByCategory')
   async getProductsByCategory(@Query() query) {
     return this.productService.getProductsByCategory(

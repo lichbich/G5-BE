@@ -3,6 +3,11 @@ import { BaseEntity } from './base/BaseEntity';
 import { ProdcutOrder } from './product_order';
 import { Category } from './categories.entity';
 
+export enum ProductTags {
+  BestSeller = 'best-seller',
+  NoneBestSeller = 'none-best-seller',
+}
+
 @Entity('products')
 export class Product extends BaseEntity {
   @Column()
@@ -19,6 +24,14 @@ export class Product extends BaseEntity {
 
   @Column()
   pImgLink: string;
+
+  @Column({
+    type: 'enum',
+    nullable: true,
+    enum: ProductTags,
+    default: ProductTags.NoneBestSeller,
+  })
+  pTag: ProductTags;
 
   @Column({ name: 'is_active', default: true })
   isActive: boolean;

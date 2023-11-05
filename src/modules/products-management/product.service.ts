@@ -1,7 +1,7 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { DataSource, ILike, Repository } from 'typeorm';
+import { DataSource, Equal, ILike, Not, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Product } from '../../entitys/products.entity';
+import { Product, ProductTags } from '../../entitys/products.entity';
 import { CreateProductDto } from '../auth-management/dtos/createProduct.dto';
 import { Category } from '../../entitys/categories.entity';
 import { handleSuccessRequest } from '../../models/common';
@@ -13,7 +13,7 @@ export class ProductService {
     private readonly dataSource: DataSource,
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Category) private catRepo: Repository<Category>,
-  ) {}
+  ) { }
 
   async getProducts(searchName = '', skip = 0, take = 10) {
     const [result, total] = await this.productRepo.findAndCount({
@@ -23,6 +23,35 @@ export class ProductService {
       skip: skip,
     });
     return { data: result, total: total };
+  }
+
+  async getProductsNoneBestSeller(searchName = '', skip = 0, take = 10) {
+    const [result, total] = await this.productRepo.findAndCount({
+      where: { pName: ILike(`%${searchName}%`), delYn: false, pTag: Not(ProductTags.BestSeller) },
+      relations: ['category'],
+      take: take,
+      skip: skip,
+    });
+    
+    return { data: result, total: total };
+  }
+
+  async getProductsBestSeller(searchName = '', skip = 0, take = 10) {
+    const [result, total] = await this.productRepo.findAndCount({
+      where: { pName: ILike(`%${searchName}%`), delYn: false, pTag: ProductTags.BestSeller },
+      relations: ['category'],
+      take: take,
+      skip: skip,
+    });
+    return { data: result, total: total };
+  }
+
+  async addBestSellerTag(id: string) {
+    return this.productRepo.update({ id }, { pTag: ProductTags.BestSeller });
+  }
+
+  async removeBestSellerTag(id: string) {
+    return this.productRepo.update({ id }, { pTag: ProductTags.NoneBestSeller });
   }
 
   async getProductDetail(id) {
