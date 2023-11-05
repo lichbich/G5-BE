@@ -17,7 +17,7 @@ export class OrderService {
     @InjectRepository(User) private usersRepo: Repository<User>,
     @InjectRepository(Product) private productRepo: Repository<Product>,
     @InjectRepository(Order) private orderRepo: Repository<Order>,
-  ) {}
+  ) { }
 
   async createOrder(orderDto: CreateOrderDto) {
     if (orderDto.product.length === 0) {
@@ -82,6 +82,7 @@ export class OrderService {
       take: take,
       skip: skip,
       relations: ['product_orders', 'user', 'product_orders.product'],
+      order: { createdAt: 'DESC' }
     });
     return { data: result, total: total };
   }
