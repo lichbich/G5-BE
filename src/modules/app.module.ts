@@ -12,6 +12,7 @@ import { GlobalHttpExceptionFilter } from 'src/config/exceptionHandler/GlobalHtt
 import { CategoryModule } from './categories-management/category.module';
 import { ProductModule } from './products-management/product.module';
 import { OrderModule } from './order-management/order.module';
+import { UserModule } from './user-mgmt/user.module';
 
 @Module({
   providers: [
@@ -30,6 +31,7 @@ import { OrderModule } from './order-management/order.module';
     CategoryModule,
     ProductModule,
     OrderModule,
+    UserModule,
     // Modules
 
     ConfigModule.forRoot({

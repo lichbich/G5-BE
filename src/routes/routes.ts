@@ -3,10 +3,12 @@ import { AuthModule } from 'src/modules/auth-management/auth.module';
 import { CategoryModule } from '../modules/categories-management/category.module';
 import { ProductModule } from '../modules/products-management/product.module';
 import { OrderModule } from '../modules/order-management/order.module';
+import { UserModule } from '../modules/user-mgmt/user.module';
 
 export const ADMIN_ROUTES: Routes = [
   { path: 'auth', module: AuthModule },
   { path: 'category', module: CategoryModule },
   { path: 'product', module: ProductModule },
   { path: 'order', module: OrderModule },
+  { path: 'user', module: UserModule },
 ];
