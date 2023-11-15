@@ -18,7 +18,7 @@ export class CreateProductDto {
   categoryId: string;
 
   @IsNotEmpty()
-  isActive: boolean;
+  isActive: string;
 
   constructor() {}
 }

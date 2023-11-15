@@ -66,7 +66,7 @@ export class ProductService {
     product.pPrice = createProductDto.pPrice;
     product.pQuantity = createProductDto.pQuantity;
     product.pImgLink = filePath;
-    product.isActive = createProductDto.isActive;
+    product.isActive = createProductDto.isActive === 'true';
     product.category = await this.catRepo.findOneBy({
       id: createProductDto.categoryId,
     });
