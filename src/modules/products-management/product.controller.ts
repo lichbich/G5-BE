@@ -63,6 +63,16 @@ export class ProductController {
   }
 
   @Public()
+  @Get('/best-seller-customer')
+  async getProductsBestSellerCustomer(@Query() query) {
+    return this.productService.getProductsBestSellerCustomer(
+        query.searchName || '',
+        Number(query.page || 0) * Number(query.size || 0),
+        Number(query.size || 10),
+    );
+  }
+
+  @Public()
   @Get('/best-seller')
   async getProductsBestSeller(@Query() query) {
     return this.productService.getProductsBestSeller(

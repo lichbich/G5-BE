@@ -46,6 +46,16 @@ export class ProductService {
     return { data: result, total: total };
   }
 
+  async getProductsBestSellerCustomer(searchName = '', skip = 0, take = 10) {
+    const [result, total] = await this.productRepo.findAndCount({
+      where: { pName: ILike(`%${searchName}%`), delYn: false, isActive: true, pTag: ProductTags.BestSeller },
+      relations: ['category'],
+      take: take,
+      skip: skip,
+    });
+    return { data: result, total: total };
+  }
+
   async addBestSellerTag(id: string) {
     return this.productRepo.update({ id }, { pTag: ProductTags.BestSeller });
   }
@@ -128,6 +138,7 @@ export class ProductService {
       .where('p.category = :categoryId', { categoryId })
       .andWhere('p.pName like :name', { name: `%${searchName}%` })
       .andWhere('p.delYn = false')
+      .andWhere('p.isActive = true')
       .take(take)
       .skip(skip);
     const total = await query.getCount();
