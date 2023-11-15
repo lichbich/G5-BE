@@ -2,7 +2,7 @@ import { DataSource, EntityManager, Repository } from 'typeorm';
 import { InjectEntityManager, InjectRepository } from '@nestjs/typeorm';
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { CreateOrderDto } from '../auth-management/dtos/createOrder.dto';
-import { Order } from '../../entitys/order';
+import { Order, OrderStatus } from '../../entitys/order';
 import { User } from '../../entitys/users.entity';
 import { ProdcutOrder } from '../../entitys/product_order';
 import { Product } from '../../entitys/products.entity';
@@ -85,5 +85,21 @@ export class OrderService {
       order: { createdAt: 'DESC' }
     });
     return { data: result, total: total };
+  }
+
+  async approveOrder(id: string) {
+    return this.orderRepo.update({ id }, { o_status: OrderStatus.APPROVE })
+  }
+
+  async cancelOrder(id: string) {
+    return this.orderRepo.update({ id }, { o_status: OrderStatus.CANCEL })
+  }
+
+  async shippingOrder(id: string) {
+    return this.orderRepo.update({ id }, { o_status: OrderStatus.SHIPPING })
+  }
+
+  async completeOrder(id: string) {
+    return this.orderRepo.update({ id }, { o_status: OrderStatus.COMPELETE })
   }
 }

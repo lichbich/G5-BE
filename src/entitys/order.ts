@@ -5,6 +5,7 @@ import { User } from './users.entity';
 
 export enum OrderStatus {
   PENDING = 0,
+  APPROVE = 4,
   SHIPPING = 1,
   COMPELETE = 2,
   CANCEL = 3,
